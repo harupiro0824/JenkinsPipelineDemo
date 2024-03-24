@@ -15,6 +15,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying'
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'MyAWS',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                        sh(script: 'aws s3 cp [ec2-user@ip-172-31-34-33 TestJob]$ ced /var/lib/jenkins/workspace/JenkinsPipeline/index.html S3://test-env-henkins-moriya/')
+                }
             }
         }
         stage('Test') {
